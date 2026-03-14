@@ -1,9 +1,47 @@
+import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Main} from './pages/main-screen/Main.tsx';
+import {AppRoute, AuthStatus} from './const.ts';
+import {Login} from './pages/Login.tsx';
+import {PrivateRoute} from './PrivateRoute.tsx';
+import {Favorites} from './pages/favorites-screen/Favorites.tsx';
+import {ErrorNotFound} from './pages/ErrorNotFound.tsx';
+import {Offer} from './pages/offer-screen/Offer.tsx';
 
 type AppProps = {
   countPages: number;
 }
 
 export function App(props: AppProps): JSX.Element {
-  return <Main countPages={props.countPages}/>;
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path={AppRoute.Main}
+          element={
+            <Main countPages={props.countPages}/>
+          }
+        />
+        <Route
+          path={AppRoute.Login}
+          element={<Login/>}
+        />
+        <Route
+          path={AppRoute.Favorites}
+          element={
+            <PrivateRoute authStatus={AuthStatus.NoAuth}>
+              <Favorites/>
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={AppRoute.Offer}
+          element={<Offer/>}
+        />
+        <Route
+          path="*"
+          element={<ErrorNotFound/>}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
 }
