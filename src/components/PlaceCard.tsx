@@ -1,6 +1,6 @@
 import {PlaceCardProps} from './props/PlaceCardProps.ts';
 
-export function PlaceCard(props : PlaceCardProps) {
+export function PlaceCard(props : PlaceCardProps): JSX.Element {
   return (
     <article className="cities__card place-card">
       {props.isPremium ? (

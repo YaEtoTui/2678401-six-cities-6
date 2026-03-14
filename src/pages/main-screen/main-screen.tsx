@@ -1,5 +1,5 @@
-import {PlaceCard} from '../components/PlaceCard.tsx';
-import {PlaceCardProps} from '../components/props/PlaceCardProps.ts';
+import {PlaceCard} from '../../components/PlaceCard.tsx';
+import {PlaceCardProps} from '../../components/props/PlaceCardProps.ts';
 
 type MainScreenProps = {
   countPages: number;
@@ -13,7 +13,7 @@ const defaultCard: PlaceCardProps = {
   type: 'Default type'
 } as const;
 
-export function MainScreen({countPages}: MainScreenProps) {
+export function MainScreen({countPages}: MainScreenProps): JSX.Element {
   return (
     <div className="page page--gray page--main">
       <header className="header">
