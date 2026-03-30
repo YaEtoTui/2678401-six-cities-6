@@ -1,6 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import {Main} from './pages/main-screen/Main.tsx';
-import {AppRoute, AuthStatus} from './const.ts';
+import {AppRoute} from './const.ts';
 import {Login} from './pages/Login.tsx';
 import {PrivateRoute} from './PrivateRoute.tsx';
 import {Favorites} from './pages/favorites-screen/Favorites.tsx';
@@ -24,7 +24,7 @@ export function App(): JSX.Element {
         <Route
           path={AppRoute.Favorites}
           element={
-            <PrivateRoute authStatus={AuthStatus.NoAuth}>
+            <PrivateRoute>
               <Favorites/>
             </PrivateRoute>
           }
