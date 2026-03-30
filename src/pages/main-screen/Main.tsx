@@ -2,11 +2,11 @@ import {useState, useMemo, useCallback, useEffect} from 'react';
 import {Link} from 'react-router-dom';
 import {useDispatch, useSelector} from 'react-redux';
 import {PlaceCardList} from '../../components/PlaceCardList.tsx';
-import {AppRoute, CITY_LIST, SortType} from '../../const.ts';
+import {AppRoute, AuthStatus, CITY_LIST, SortType} from '../../const.ts';
 import Map from '../../components/Map.tsx';
 import {City, Points} from '../../types.tsx';
 import {CityList} from '../../components/CityList.tsx';
-import {changeCity, fetchOffersAction} from '../../store/action.ts';
+import {changeCity, fetchOffersAction, logout} from '../../store/action.ts';
 import {AppDispatch, RootState} from '../../store/indexStore.ts';
 import Spinner from '../../components/Spinner.tsx';
 import ExceptionMessage from '../../components/ExceptionMessage.tsx';
@@ -18,6 +18,8 @@ export function Main(): JSX.Element {
   const filteredOfferList = allOfferList.filter((offer) => offer.city.name === selectedCity);
   const isOffersDataLoading = useSelector((state: RootState) => state.isOffersDataLoading);
   const offersDataError = useSelector((state: RootState) => state.offersDataError);
+  const authStatus = useSelector((state: RootState) => state.authStatus);
+  const user = useSelector((state: RootState) => state.user);
 
   const [sortType, setSortType] = useState<SortType>('Popular');
   const [isSortMenuOpen, setIsSortMenuOpen] = useState(false);
@@ -64,6 +66,10 @@ export function Main(): JSX.Element {
     dispatch(changeCity(city));
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   const handleSortTypeChange = useCallback((newSortType: SortType) => {
     setSortType(newSortType);
     setIsSortMenuOpen(false);
@@ -89,19 +95,33 @@ export function Main(): JSX.Element {
             </div>
             <nav className="header__nav">
               <ul className="header__nav-list">
-                <li className="header__nav-item user">
-                  <a className="header__nav-link header__nav-link--profile" href="#">
-                    <div className="header__avatar-wrapper user__avatar-wrapper">
-                    </div>
-                    <span className="header__user-name user__name">Oliver.conner@gmail.com</span>
-                    <span className="header__favorite-count">3</span>
-                  </a>
-                </li>
-                <li className="header__nav-item">
-                  <a className="header__nav-link" href="#">
-                    <span className="header__signout">Sign out</span>
-                  </a>
-                </li>
+                {authStatus === AuthStatus.Auth && user ? (
+                  <>
+                    <li className="header__nav-item user">
+                      <Link className="header__nav-link header__nav-link--profile" to={AppRoute.Favorites}>
+                        <div className="header__avatar-wrapper user__avatar-wrapper">
+                          <img className="header__avatar user__avatar" src={user.avatarUrl} alt={user.name} width="20" height="20" />
+                        </div>
+                        <span className="header__user-name user__name">{user.email}</span>
+                        <span className="header__favorite-count">{allOfferList.filter((offer) => offer.isFavorite).length}</span>
+                      </Link>
+                    </li>
+                    <li className="header__nav-item">
+                      <a className="header__nav-link" href="#" onClick={(e) => {
+                        e.preventDefault(); handleLogout();
+                      }}
+                      >
+                        <span className="header__signout">Sign out</span>
+                      </a>
+                    </li>
+                  </>
+                ) : (
+                  <li className="header__nav-item">
+                    <Link className="header__nav-link" to={AppRoute.Login}>
+                      <span className="header__login">Sign in</span>
+                    </Link>
+                  </li>
+                )}
               </ul>
             </nav>
           </div>

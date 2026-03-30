@@ -1,5 +1,5 @@
 import {Link} from 'react-router-dom';
-import {OfferType} from '../offer.ts';
+import {OfferType} from '../domain/dto/offer.ts';
 
 export type PlaceCardProps = {
   offer: OfferType;

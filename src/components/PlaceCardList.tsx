@@ -1,5 +1,5 @@
 import {useEffect, useState} from 'react';
-import {OfferType} from '../offer.ts';
+import {OfferType} from '../domain/dto/offer.ts';
 import {PlaceCard} from './PlaceCard.tsx';
 
 interface OffersListProps {
